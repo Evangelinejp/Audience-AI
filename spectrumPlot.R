@@ -1,4 +1,5 @@
 #!/usr/bin/env Rscript
+#Commemt Comment!
 #https://dsp.stackexchange.com/questions/47271/how-to-use-function-spectrum-in-r-to-perform-spectral-analysis
 spectrumPlot <- function() {
 	ts <- 0.05
