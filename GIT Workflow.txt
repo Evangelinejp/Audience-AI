@@ -1,0 +1,27 @@
+WORKFLOW WITH GIT
+
+IF WORK HAS BEEN DONE
+
+1 - Stash local changes
+2 - Pull remote branch
+3 - 
+
+
+IF READY TO CONTINUE ON OTHER COMPUTER
+
+1 - Pull remote branch
+2 - (Work)
+3 - Add -A
+4 - commit -m "message"
+5 - push -u origin [branch]
+
+
+READY TO MERGE
+
+REMOTE BRANCHES -> Github -> Pull Request
+
+LOCAL BRANCHES
+
+1 - stash
+2 - Checkout [local branch]
+3 - merge master
