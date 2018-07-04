@@ -1,6 +1,6 @@
 # Script CANSIM contenant les équivalences Notes-Fréquences et les
 # fondamentales et harmoniques selon la corde de guitare jouée
-
+# This is a comment to test Github. Please ignore.
 #Note   Entier	Fréquence	F-2.89%	F+2.89%	
 Eq_Notes_Freq = matrix(
 + c(
