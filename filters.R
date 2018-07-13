@@ -21,7 +21,7 @@ apply_fft <- function(audioSample) {
 	fftLength <- length(Y)
 }
 
-get_fftDeltaFreq <- function {
+get_fftDeltaFreq <- function() {
 	fftDeltaFreq <- ((fftFs / 2) / (fftLength + 1))
 }
 
