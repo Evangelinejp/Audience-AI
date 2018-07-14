@@ -15,51 +15,30 @@ fftLength <- 4096	# Fourrier Transform size
 
 
 # Routines
-separateSamples <- function(wave) {
-  sampleLength <- length(wave)
-  listLength <- sampleLength %/% fftLength
-  sampleList <- vector("list", length = listLength)
-  for(i in 1:listLength) {
-    sampleList[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
-  }
-  return(sampleList)
-}
-
-separateFFT <- function(list) {
-  fftL <- vector("list", length = length(list))
-  for(i in 1:length(list)) {
-    fftL[[i]] <- apply_fft(list[[i]])
-  }
-  return(fftL)
-}
-
-separateExtract <- function(list) {
-  extractL <- vector("list", length = length(list))
-  for(i in 1:length(list)) {
-    extractL <- extractNotes(list[[i]])
-  }
-  return(extractL)
-}
 apply_fft <- function(wave) {
   Y <- spec(wave, f = fftFs, wl = fftLength)
   return(Y)
+  #previous code for posterity:
 	#Y <- fft(audioSample, inverse = FALSE)
 	#fftLength <- length(Y)
 }
 
 get_fftDeltaFreq <- function() {
 	fftDeltaFreq <- ((fftFs / 2) / (fftLength + 1))
+	return(fftDeltaFreq)
 }
 
-# extract peaks, or high values in sample post FFT
+# extract peaks, or high values in sample post FFT. Needs rewrite
 extractPeaks <- function(Y) {
-	peaksLength <- (length(Y) / 2)	# FFTs duplicate data, hence /2
+  
+  #fftDeltaFreq <- get_fftDeltaFreq
+	#peaksLength <- (length(Y) / 2)	# FFTs duplicate data, hence /2
 	# Keep values above 5% of maximum peak; others are set to "0"
-	pct <- 0.05		# we keep values that are higher than 5% of max
-	Ymax <- max(abs(samplePostFFT))
-	pct_X_Ymax <- pct*Ymax
-	Yfiltered <- abs(Y[1:peaksLength])	
-	validValues <- which(Yfiltered >= pct_X_Ymax) 
+	#pct <- 0.05		# we keep values that are higher than 5% of max
+	#Ymax <- max(abs(Y))
+	#pct_X_Ymax <- pct*Ymax
+	#Yfiltered <- abs(Y[1:peaksLength])	
+	#validValues <- which(Yfiltered >= pct_X_Ymax) 
 
 	# Keep values that are above "0" and place them in a "peaks" matrix which contains NoteId, Freq, Intensity.
 	peaks_id <- rep(151, times=peaksLength)

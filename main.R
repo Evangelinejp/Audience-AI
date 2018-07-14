@@ -38,15 +38,21 @@ sample <- readWave("Exp04_B5_Gd5_E5.wav", from = 0, to = Inf, units = "samples")
 
 
 # Sample analysis
-# Divide the wave into an array of samples, each 4098 samples
-sampleL <- separateSamples(sample)
-# 	Perform FFT
-sampleFFT <- separateFFT(sampleL)
-# 	Extract peaks
-sampleNotes <- separateExtract(sampleFFT)
-
-sampleNotes[[65]]
-
-# 	Matchmaking
-
-#	
+#Separates sample then puts it through all the functions for analysis
+#maybe too unclean for main, should be moved into a function in filters
+sampleLength <- length(wave)
+listLength <- sampleLength %/% fftLength
+sampleS <- vector("list", length = listLength) #saved in a list for future debugging's sake
+sampleFFT <- vector("list", length = listLength) #when finished, change these to not lists to save space
+samplePeaks <- vector("list", length = listLength)
+sampleNotes <- vector("list", length = listLength)
+for(i in 1:listLength) {
+  # Divide the wave into an array of samples, each 4098 samples
+  sampleS[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
+  # Fourier transform
+  sampleFFT[[i]] <- apply_fft(sampleS)
+  # Peaks extraction
+  samplePeaks[[i]] <- extractPeaks(sampleFFT)
+  # notes
+  sampleNotes[[i]] <- extractNotes(samplePeaks)
+}
