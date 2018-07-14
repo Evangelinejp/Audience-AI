@@ -15,10 +15,36 @@ fftLength <- 4096	# Fourrier Transform size
 
 
 # Routines
+separateSamples <- function(wave) {
+  sampleLength <- length(wave)
+  listLength <- sampleLength %/% fftLength
+  sampleList <- vector("list", length = listLength)
+  for(i in 1:listLength) {
+    sampleList[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
+  }
+  return(sampleList)
+}
 
-apply_fft <- function(audioSample) {
-	Y <- fft(audioSample, inverse = FALSE)
-	fftLength <- length(Y)
+separateFFT <- function(list) {
+  fftL <- vector("list", length = length(list))
+  for(i in 1:length(list)) {
+    fftL[[i]] <- apply_fft(list[[i]])
+  }
+  return(fftL)
+}
+
+separateExtract <- function(list) {
+  extractL <- vector("list", length = length(list))
+  for(i in 1:length(list)) {
+    extractL <- extractNotes(list[[i]])
+  }
+  return(extractL)
+}
+apply_fft <- function(wave) {
+  Y <- spec(wave, f = fftFs, wl = fftLength)
+  return(Y)
+	#Y <- fft(audioSample, inverse = FALSE)
+	#fftLength <- length(Y)
 }
 
 get_fftDeltaFreq <- function() {
@@ -56,7 +82,7 @@ extractNotes <- function(extractedPeaks) {
 	
 	#Keep Highest Intensities for each extracted notes
 	for (i in extractedNotesLength) {
-		if(extractedPeaks[1,i])
+		if(extractedPeaks[1,i]) {}
 	}
 	# For all peaks	
 	for (i in peaksLength) {
