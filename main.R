@@ -13,7 +13,7 @@ source('cansim_script.R')	# Loads value tables for audio conversion.
 source('load_audio_file.R')	# Loads 'load audio file' dialog routine.
 source('filters.R')	# Loads audio data filter routines.
 #source('equalizer.R')	# Loads audio equalizing filter values.
-#source('match.R')	# Loads matching routines.
+source('match.R')	# Loads matching routines.
 #source('refresh.R')	# Loads variable clearing routines.
 
 

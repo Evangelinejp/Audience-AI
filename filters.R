@@ -84,7 +84,8 @@ freqToNoteId <- function(freq) {
 
 	indexOfNote <- which(Eq_Notes_Freq[ ,4] <= freq & freq <= Eq_Notes_Freq[ ,5])
 
-	if(indexOfNote != NULL) {	
+	#if(indexOfNote != NULL) {
+	if(!is.null(indexOfNote)) {	
 		noteIdFound <- Eq_Notes_Freq[indexOfNote][1]
 	
 	} else {
