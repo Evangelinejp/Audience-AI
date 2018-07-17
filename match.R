@@ -16,11 +16,9 @@ mid <- c(1.9, 5.0, 2.0, 0.8, 0.0, 0.0)
 highMid <- c(8.0, 20.0, 0.0, 0.0, 0.0, 0.0)
 notesEtHarmLength <- ncol(Notes_Et_Harm)
 
-# Routine
+# Routines
 
-# Pseudo-code: 
-# Analyser ExtractedNotes de facon a quantifier toutes les notes avec les intensites recueillies.  Les trier et retourner les 12 plus intenses.
-
+# Algorithm that extracts notes from filtered audio sample
 matchmaker <- function(musicData) {
   # Create empty matchedNotes matrix
   matchedNotesLength <- 152
@@ -66,12 +64,12 @@ matchmaker <- function(musicData) {
   }
   
   # Sort matchedNotes by intensity from highest to lowest.
-  #sort(matchedNotes, decreasing = TRUE)
-  #order(matchedNotes$2, decreasing = TRUE)
-  return(matchedNotes)
+  matchedNotes <- sortNotesByIntensity(matchedNotes)
   
+  return(matchedNotes)
 }
 
+# returns note index according to it's note ID
 getNoteIndex <- function(noteId) {
   noteIndex <- 152 #By default, Not a Note
   notesEtHarmLength <- length(Notes_Et_Harm)
@@ -83,4 +81,26 @@ getNoteIndex <- function(noteId) {
     }
   }
   return(noteIndex)
+}
+
+# sorts notes by intensity in matchedNotes
+sortNotesByIntensity <- function(notesAndIntensities) {
+  # Sort matchedNotes by intensity from highest to lowest.
+  x <- notesAndIntensities[1,] #noteId
+  y <- notesAndIntensities[2,] #intensity
+  o <- order(y, decreasing=TRUE)
+  names(x) <- literals
+  notesAndIntensities <- rbind(x[o], y[o], deparse.level = 1)
+  rownames(notesAndIntensities) <- c('Note Id', 'Intensity')
+  
+  return(notesAndIntensities)
+}
+
+# Displays top n notes and intensity
+dispNAI <- function(notesAndInt, currentBlock=1, totalBlocks=1, printSize=12) {
+  printContent <- rbind(notesAndInt[1, 1:printSize], notesAndInt[2, 1:printSize], deparse.level = 1)
+  rownames(printContent) <- c('Note Id', 'Intensity')
+  #print(c('Sample Block # ', currentBlock, ' of ', totalBlocks))
+  cat("Sample Block # ", currentBlock, " of ", totalBlocks, "\n")
+  print(printContent)
 }

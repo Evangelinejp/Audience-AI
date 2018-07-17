@@ -34,25 +34,32 @@ source('match.R')	# Loads matching routines.
 # matchedIntensities: contains notes of a given sample detected by matching.
 
 # Load Audio File
-sample <- readWave("Exp04_B5_Gd5_E5.wav", from = 0, to = Inf, units = "samples")
-
+inWave <- readWave("Exp04_B5_Gd5_E5.wav", from = 0, to = Inf, units = "samples")
+samples <- channel(inWave, 'left')
 
 # Sample analysis
 #Separates sample then puts it through all the functions for analysis
 #maybe too unclean for main, should be moved into a function in filters
-sampleLength <- length(wave)
+#sampleLength <- length(wave)
+sampleLength <- length(samples)
 listLength <- sampleLength %/% fftLength
-sampleS <- vector("list", length = listLength) #saved in a list for future debugging's sake
+sample <- vector("list", length = listLength) #saved in a list for future debugging's sake
 sampleFFT <- vector("list", length = listLength) #when finished, change these to not lists to save space
 samplePeaks <- vector("list", length = listLength)
 sampleNotes <- vector("list", length = listLength)
+sampleMatchedNotes <- vector("list", length = listLength)
 for(i in 1:listLength) {
   # Divide the wave into an array of samples, each 4098 samples
-  sampleS[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
+  #sampleS[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
+  sample[[i]] <- samples@left[(i*fftLength):(((i+1)*fftLength)-1)]
   # Fourier transform
-  sampleFFT[[i]] <- apply_fft(sampleS)
+  sampleFFT[[i]] <- apply_fft(sample[[i]])
   # Peaks extraction
-  samplePeaks[[i]] <- extractPeaks(sampleFFT)
-  # notes
-  sampleNotes[[i]] <- extractNotes(samplePeaks)
+  samplePeaks[[i]] <- extractPeaks(sampleFFT[[i]])
+  # Filtered Notes
+  sampleNotes[[i]] <- extractNotes(samplePeaks[[i]])
+  # Matched Notes
+  sampleMatchedNotes[[i]] <- matchmaker(sampleNotes[[i]])
+  # Display Notes
+  dispNAI(sampleMatchedNotes[[i]], i, listLength)
 }
