@@ -13,7 +13,7 @@ lowBass <- c(0.7, 0.5, 0.4, 0.2, 0.4, 0.2)
 highBass <- c(0.6, 0.7, 0.7, 0.4, 0.2, 0.1)
 lowMid <- c(0.9, 1.1, 1.1, 1.3, 0.6, 0.0)
 mid <- c(1.9, 5.0, 2.0, 0.8, 0.0, 0.0)
-highMid <- c(8.0, 20.0, 0.0, 0.0, 0.0, 0.0)
+highMid <- c(2.2, 6.6, 2.2, 1.1, 0.0, 0.0)
 notesEtHarmLength <- ncol(Notes_Et_Harm)
 
 # Routines
@@ -54,7 +54,7 @@ matchmaker <- function(musicData) {
       }
     }
     
-    if (84 <= noteId && noteId <= 107 ) { # If High Midrange [C7-B8]
+    if (84 <= noteId && noteId <= 120 ) { # If High Midrange [C7-C10]
       for(j in 1:notesEtHarmLength) {
         intensitiesSum <- (intensitiesSum + musicData[3, getNoteIndex(Notes_Et_Harm[i, j])] * highMid[j])
       }

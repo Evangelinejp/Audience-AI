@@ -12,9 +12,9 @@ library(tuneR)
 source('cansim_script.R')	# Loads value tables for audio conversion.
 source('load_audio_file.R')	# Loads 'load audio file' dialog routine.
 source('filters.R')	# Loads audio data filter routines.
-#source('equalizer.R')	# Loads audio equalizing filter values.
 source('match.R')	# Loads matching routines.
-#source('refresh.R')	# Loads variable clearing routines.
+source('export.R')  # Sort and export functions for data manipulation.
+#source('refresh.R')	# Loads variable clearing routines. Good against memory leaks...
 
 
 # Variables presentation
@@ -33,14 +33,17 @@ source('match.R')	# Loads matching routines.
 # matchedNotes: contains notes of a given sample detected by matching.
 # matchedIntensities: contains notes of a given sample detected by matching.
 
+# Ask for Audio File
+#audioFileName <- enter_filename()
+audioFileName <- "Exp04_B5_Gd5_E5.wav"
+
 # Load Audio File
-inWave <- readWave("Exp04_B5_Gd5_E5.wav", from = 0, to = Inf, units = "samples")
+inWave <- readWave(audioFileName, from = 0, to = Inf, units = "samples")
 samples <- channel(inWave, 'left')
 
 # Sample analysis
 #Separates sample then puts it through all the functions for analysis
 #maybe too unclean for main, should be moved into a function in filters
-#sampleLength <- length(wave)
 sampleLength <- length(samples)
 listLength <- sampleLength %/% fftLength
 sample <- vector("list", length = listLength) #saved in a list for future debugging's sake
@@ -48,6 +51,7 @@ sampleFFT <- vector("list", length = listLength) #when finished, change these to
 samplePeaks <- vector("list", length = listLength)
 sampleNotes <- vector("list", length = listLength)
 sampleMatchedNotes <- vector("list", length = listLength)
+sortedMatchedNotes <- vector("list", length = listLength)
 for(i in 1:listLength) {
   # Divide the wave into an array of samples, each 4098 samples
   #sampleS[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
@@ -61,5 +65,9 @@ for(i in 1:listLength) {
   # Matched Notes
   sampleMatchedNotes[[i]] <- matchmaker(sampleNotes[[i]])
   # Display Notes
-  dispNAI(sampleMatchedNotes[[i]], i, listLength)
+  #dispNAI(sampleMatchedNotes[[i]], i, listLength)
 }
+
+# put files into exportedNotes for data mining
+sortedMatchedNotes <- sortNotesListByIncreasingNoteId(sampleMatchedNotes)
+exportNotes <- listToArray(sortedMatchedNotes)

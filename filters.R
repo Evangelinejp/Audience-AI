@@ -54,18 +54,24 @@ extractPeaks <- function(Y) {
 	return(peaks)
 }
 
-extractNotes <- function(originalExtractedPeaks) {
-	# Copy extractedPeaks
-  extractedPeaks <- originalExtractedPeaks
+extractNotes <- function(extractedPeaks) {
   # Create empty ExtractedNotes matrix
 	extractedNotesLength <- 152
 	zeroes <- rep(0, times=extractedNotesLength)
 	extractedNotes <- matrix( c(0:(extractedNotesLength-1), zeroes, zeroes), byrow=TRUE, 3, extractedNotesLength)
 	
-	# Extract NoteId for each sample
+	# hacks to exclude NULL or empty vectors
+	if(is.null(extractedPeaks)) {
+	  return(extractedNotes)
+	}
 	peaksLength <- length(extractedPeaks[1,])
+	if(peaksLength < 1) {
+	  return(extractedNotes)
+	}
+	
+	# Extract NoteId for each sample
 	for (i in 1:peaksLength) {
-		extractedPeaks[1,i] <- freqToNoteId(extractedPeaks[3,i])
+	  extractedPeaks[1,i] <- freqToNoteId(extractedPeaks[3,i])
 	}
 	
 	#Keep Highest Intensities for each extracted notes
