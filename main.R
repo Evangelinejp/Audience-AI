@@ -56,6 +56,7 @@ for(i in 1:listLength) {
   # Divide the wave into an array of samples, each 4098 samples
   #sampleS[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
   sample[[i]] <- samples@left[(i*fftLength):(((i+1)*fftLength)-1)]
+  sample[[i]][is.na(sample[[i]])] <- 0
   # Fourier transform
   sampleFFT[[i]] <- apply_fft(sample[[i]])
   # Peaks extraction
