@@ -27,7 +27,7 @@ apply_fft <- function(aSample) {
 }
 
 get_fftDeltaFreq <- function() {
-	fftDeltaFreq <- ((fftFs / 2) / (fftLength + 1))
+	fftDeltaFreq <- ((fftFs) / (fftLength + 1))
 	
 	return(fftDeltaFreq)
 }
