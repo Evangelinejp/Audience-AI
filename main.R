@@ -34,8 +34,11 @@ source('export.R')  # Sort and export functions for data manipulation.
 # matchedIntensities: contains notes of a given sample detected by matching.
 
 # Ask for Audio File
-#audioFileName <- enter_filename()
-audioFileName <- "Exp04_B5_Gd5_E5.wav"
+#fileName <- enter_filename()
+fileName <- "Exp04_B5_Gd5_E5"
+audioFileName <- paste(fileName, ".wav", sep="")
+#audioFileName <- "Exp04_B5_Gd5_E5.wav"
+#audioFileName <- "E2-B3.wav"
 
 # Load Audio File
 inWave <- readWave(audioFileName, from = 0, to = Inf, units = "samples")
@@ -52,6 +55,7 @@ samplePeaks <- vector("list", length = listLength)
 sampleNotes <- vector("list", length = listLength)
 sampleMatchedNotes <- vector("list", length = listLength)
 sortedMatchedNotes <- vector("list", length = listLength)
+maximums <- matrix(c(rep(0, times=listLength), rep(0, times=listLength)), byrow=TRUE, 2, listLength)
 for(i in 1:listLength) {
   # Divide the wave into an array of samples, each 4098 samples
   #sampleS[[i]] <- readWave("Exp04_B5_Gd5_E5.wav", from = (i*fftLength), to = ((i+1)*fftLength)-1, units = "samples")
@@ -66,9 +70,20 @@ for(i in 1:listLength) {
   # Matched Notes
   sampleMatchedNotes[[i]] <- matchmaker(sampleNotes[[i]])
   # Display Notes
-  #dispNAI(sampleMatchedNotes[[i]], i, listLength)
+  dispNAI(sampleMatchedNotes[[i]], i, listLength)
+  #par(mfrow=c(1,2))
+  #matplot(samplePeaks[[i]][3,],samplePeaks[[i]][2,], type = "h")
+  #matplot(sampleNotes[[i]][1,],sampleNotes[[i]][2,], type = "h")
+  maximums[1,i] <- sampleMatchedNotes[[i]][1,1]
+  maximums[2,i] <- sampleMatchedNotes[[i]][2,1]
+  
 }
 
+# plot maximums for debugging
+par(mfrow=c(1,2))
+matplot(c(1:listLength), maximums[1,], xlab="samples", ylab="NoteID", type = "h")
+matplot(c(1:listLength), maximums[2,], xlab="samples", ylab="Intensity", type = "h")
 # put files into exportedNotes for data mining
 sortedMatchedNotes <- sortNotesListByIncreasingNoteId(sampleMatchedNotes)
 exportNotes <- listToArray(sortedMatchedNotes)
+write.csv(exportNotes, file = paste(fileName, ".csv", sep=""))

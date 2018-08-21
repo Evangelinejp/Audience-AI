@@ -32,31 +32,32 @@ matchmaker <- function(musicData) {
     
     if (0 <= noteId && noteId <= 35 ) { # If Low Bass [C0-B2]
       for(j in 1:notesEtHarmLength) {
-        intensitiesSum <- (intensitiesSum + musicData[3, getNoteIndex(Notes_Et_Harm[i, j])] * lowBass[j])
+        #intensitiesSum <- (intensitiesSum + musicData[3, getNoteIndex(Notes_Et_Harm[i, j])] * lowBass[j])
+        intensitiesSum <- (intensitiesSum + musicData[2, getNoteIndex(Notes_Et_Harm[i, j])] * lowBass[j])
       }
     }
     
     if (36 <= noteId && noteId <= 47 ) { # If High Bass [C3-B3]
       for(j in 1:notesEtHarmLength) {
-        intensitiesSum <- (intensitiesSum + musicData[3, getNoteIndex(Notes_Et_Harm[i, j])] * highBass[j])
+        intensitiesSum <- (intensitiesSum + musicData[2, getNoteIndex(Notes_Et_Harm[i, j])] * highBass[j])
       }
     }
     
     if (48 <= noteId && noteId <= 59 ) { # If Low Midrange [C4-B4]
       for(j in 1:notesEtHarmLength) {
-        intensitiesSum <- (intensitiesSum + musicData[3, getNoteIndex(Notes_Et_Harm[i, j])] * lowMid[j])
+        intensitiesSum <- (intensitiesSum + musicData[2, getNoteIndex(Notes_Et_Harm[i, j])] * lowMid[j])
       }
     }
     
     if (60 <= noteId && noteId <= 83 ) { # If Midrange [C5-B6]
       for(j in 1:notesEtHarmLength) {
-        intensitiesSum <- (intensitiesSum + musicData[3, getNoteIndex(Notes_Et_Harm[i, j])] * mid[j])
+        intensitiesSum <- (intensitiesSum + musicData[2, getNoteIndex(Notes_Et_Harm[i, j])] * mid[j])
       }
     }
     
     if (84 <= noteId && noteId <= 120 ) { # If High Midrange [C7-C10]
       for(j in 1:notesEtHarmLength) {
-        intensitiesSum <- (intensitiesSum + musicData[3, getNoteIndex(Notes_Et_Harm[i, j])] * highMid[j])
+        intensitiesSum <- (intensitiesSum + musicData[2, getNoteIndex(Notes_Et_Harm[i, j])] * highMid[j])
       }
     }
     

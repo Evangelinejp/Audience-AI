@@ -12,6 +12,7 @@ source('cansim_script.R')
 # Global Variables of filters.R
 fftFs <- 44100	# audio sample rate
 fftLength <- 4096	# Fourrier Transform size
+normFactor <- 1/fftLength # normalization factor based on size
 
 
 # Routines
@@ -20,8 +21,11 @@ apply_fft <- function(aSample) {
   #Y <- spec(aSample, f = fftFs, wl = fftLength)
   #return(Y)
   #previous code for posterity:
-	Y <- fft(aSample, inverse = FALSE)
-	#fftLength <- length(Y)
+  #Y <- fft(aSample, inverse = FALSE)
+  #fftLength <- length(Y)
+  #Normalization added 2018-08-21
+  #To normalize, divide values by sample length - multiplying is more efficient than dividing
+  Y <- fft(aSample, inverse = FALSE)*normFactor
 	
 	return(Y)
 }
@@ -44,7 +48,7 @@ extractPeaks <- function(Y) {
 	Yfiltered <- abs(Y[1:peaksLength])	
 	validValues <- which(Yfiltered >= pct_X_Ymax)
 	validLength <- length(validValues)
-
+ 
 	# Keep values that are above "0" and place them in a "peaks" matrix which contains NoteId, Freq, Intensity.
 	peaks_id <- rep(151, times=validLength)
 	peaks_x <- Yfiltered[validValues]
@@ -68,9 +72,10 @@ extractNotes <- function(extractedPeaks) {
 	if(peaksLength < 1) {
 	  return(extractedNotes)
 	}
-	
+	#browser()
 	# Extract NoteId for each sample
 	for (i in 1:peaksLength) {
+	  #if(peaksLength == 391L) {print(i)}
 	  extractedPeaks[1,i] <- freqToNoteId(extractedPeaks[3,i])
 	}
 	
@@ -109,7 +114,7 @@ freqToNoteId <- function(freq) {
 	}
 
 	if(!is.null(indexOfNote)) {	
-		noteIdFound <- Eq_Notes_Freq[indexOfNote, 1]
+		noteIdFound <- Eq_Notes_Freq[indexOfNote[1], 1]
 	
 	} else {
 		noteIdFound <- Eq_Notes_Freq[152, 1]  # 151 = Not A Note
